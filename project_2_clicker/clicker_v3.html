@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>clicker_v3</title>
+    <style>
+        body {
+            background: #dadaff;
+            /*use #202020 for dark and #dadaff for light*/
+        }
+
+        .div {
+            display: block;
+            clear: left;
+            float: left;
+            margin: 10px;
+        }
+
+        #score_counter {
+            text-align: center;
+            font-size: 50px;
+            font-weight: normal;
+        }
+
+        #button_main {
+            display: block;
+            margin: auto;
+            background: #ff0000;
+            border: solid #000000 2px;
+            border-radius: 15px;
+            width: 50%;
+            aspect-ratio: 5/1;
+            color: #f0f0f0;
+            font-size: 30px;
+        }
+
+        #button_main:hover {
+            background: #af0000;
+        }
+
+        #x2upgrade {
+            display: inline;
+            float: left;
+            background: #ffff0f;
+            border: solid #000000 1px;
+        }
+
+        #x2upgrade:hover {
+            background: #cfcf0f;
+        }
+
+        .x2upgrade_class {
+            display: inline;
+            margin: 0px 5px;
+        }
+
+        #autoclicker {
+            display: inline;
+            clear: left;
+            background: #00ff00;
+            color: #000000;
+        }
+
+        #autoclicker:hover {
+            background: #00cf00;
+        }
+        .autoclicker_class {
+            display: inline;
+            margin: 0px 5px;
+        }
+        #autoclicker_speed {
+            display: none;
+            clear: left;
+            background: #00ff00;
+            color: #000000;
+        }
+        #autoclicker_speed:hover {
+            background: #00cf00
+        }
+        .autoclicker_hidden_class {
+            display: none;
+        }
+         #p_get_a_life {
+            display: block;
+            background: #000000;
+            font-size: 50px;
+            color: #ffffff;
+            text-align: center;
+            visibility: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="div_main">
+        <h1 id="score_counter">0</h1>
+        <button id="button_main">Click Me!</button>
+    </div>
+    <p id="upgrade_p">Upgrades Below!</p>
+    <div id="div_x2upgrade" class="div">
+        <button id="x2upgrade">X2 Clicks</button>
+        <p id="x2upgrade_cost" class="x2upgrade_class">Cost=10</p>
+        <p id="x2upgrade_modifier" class="x2upgrade_class">Current Modifier=1</p>
+    </div>
+    <div id="div_autoclicker" class="div">
+        <div class="div">
+            <button id="autoclicker">Autoclicker</button>
+            <p id="autoclicker_cost" class="autoclicker_class">Cost=10</p>
+        </div>
+        <div class="div">
+            <button id="autoclicker_speed" class="autoclicker_hidden_class">Speed</button>
+            <p id="autoclicker_speed_upgrade" class="autoclicker_class autoclicker_hidden_class">Current Speed: 1/sec</p>
+            <p id="autoclicker_speed_cost" class="autoclicker_class autoclicker_hidden_class">Cost=10</p>
+        </div>
+        <div class="div">
+            <button id="autoclicker_modifier" class="autoclicker_hidden_class">Apply Modifier to Autoclicker</button>
+            <p id="autoclicker_modifier_cost" class="autoclicker_class autoclicker_hidden_class">Cost=200</p>
+        </div>
+    </div>
+    <div id="div_meme">
+        <p id="p_get_a_life">Go get a job, loser</p>
+    </div>
+</body>
+
+<!--Warning - Javascript beyond this point-->
+<script>
+    //declaring variables
+    var clicks = 0
+    var score = 0
+    var modifier = 1
+    var score_threshold = 10
+    var autoclicker_active = false
+    var autoclicker_owned = false
+    var autoclicker_score_threshold = 10
+    var autoclicker_value = 0
+    var autoclicker_modifier_onwed = false
+
+    //declaring constants
+    const button_main = document.getElementById("button_main")
+    const score_counter = document.getElementById("score_counter")
+    const x2upgrade = document.getElementById("x2upgrade")
+    const autoclicker = document.getElementById("autoclicker")
+    const autoclicker_speed_upgrade = document.getElementById("autoclicker_speed_upgrade")
+
+    //checking for clicks to run functions
+    button_main.addEventListener("click", score_up)
+    button_main.addEventListener("click", clicks_up)
+    x2upgrade.addEventListener("click", modifier_up)
+    autoclicker.addEventListener("click", autocl_en)
+    document.getElementById("autoclicker_speed").addEventListener("click", autoclicker_speed_function)
+   
+    //defining functions
+    function score_up() {
+        score +=  modifier
+        score_counter.innerText = Math.floor(score)
+    }
+    function clicks_up() {
+        clicks += 1
+        if (clicks >= 200) {
+            document.getElementById("p_get_a_life").style.visibility = 'visible';
+        }
+    }
+    function modifier_up() {
+        if (score >= score_threshold) {
+            modifier *= 2
+            document.getElementById("x2upgrade_modifier").innerText = "Current Modifier=" + modifier
+            score -= score_threshold
+            score_counter.innerText = Math.floor(score)
+            score_threshold *= 4
+            document.getElementById("x2upgrade_cost").innerText = "Cost=" + score_threshold
+            if (autoclicker_modifier_onwed) {
+                autoclicker_value *= modifier
+                autoclicker_speed_upgrade.innerText = "Current Speed: " + autoclicker_value + "/sec"
+            }
+        }
+    }
+    function autocl_en() {
+        if (autoclicker_owned === false) {
+            if (score >= autoclicker_score_threshold) {
+                autoclicker_owned = true
+                autoclicker_value += 1
+                autoclicker_active = true
+                score -= autoclicker_score_threshold
+                score_counter.innerText = Math.floor(score)
+                document.getElementById("autoclicker_cost").style.display = 'none';
+                autoclicker.innerText = "Autoclicker Deactivate"
+                for (let item of document.getElementsByClassName("autoclicker_hidden_class")) {
+                    item.style.display = 'inline';
+                }
+                document.getElementsByClassName("autoclicker_hidden_class")
+                autoclicker_speed_upgrade.innerText = "Current Speed: " + autoclicker_value + "/sec"
+            }
+        } else {
+            if (autoclicker_active) {
+                autoclicker_active = false
+                autoclicker.innerText = "Autoclicker Activate"
+            } else {
+                autoclicker_active = true
+                autoclicker.innerText = "Autoclicker Deactivate"
+            }
+        }
+    }
+    function autoclicker_function() {
+        if (autoclicker_active === true) {
+            score += autoclicker_value
+            score_counter.innerText = Math.floor(score)
+        }
+    }
+    function autoclicker_speed_function() {
+        if (score >= autoclicker_score_threshold) {
+            autoclicker_value += 0.5
+            score -= autoclicker_score_threshold
+            autoclicker_score_threshold *= 2
+            score_counter.innerText = Math.floor(score)
+            if (autoclicker_modifier_onwed) ()=> {
+                autoclicker_value *= modifier
+            }
+            autoclicker_speed_upgrade.innerText = "Current Speed: " + autoclicker_value + "/sec"
+            document.getElementById("autoclicker_speed_cost").innerText = "Cost=" + autoclicker_score_threshold
+        }
+    }
+    //autoclicker is constantly running, it's just adding nothing until you buy the upgrade, then it starts adding 1
+    setInterval(autoclicker_function, 1000)
+
+    document.getElementById("autoclicker_modifier").addEventListener("click", ()=> {
+        if (score >= 10)
+            score -= 10
+            autoclicker_modifier_onwed = true
+            autoclicker_value *= modifier
+            autoclicker_speed_upgrade.innerText = "Current Speed: " + autoclicker_value + "/sec"
+            document.getElementById("autoclicker_modifier").style.display = 'none';
+            document.getElementById("autoclicker_modifier_cost").style.display = 'none';
+        }
+    )
+</script>
