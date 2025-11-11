@@ -29,9 +29,7 @@ function move_fox() {
 
 document.addEventListener("keydown", keydown_function)
 document.addEventListener("keyup", keyup_function)
-
 const keys_down = {}
-
 function keydown_function(e) {
     keys_down[e.key] = true
 }
@@ -46,7 +44,7 @@ function handle_keys() {
     if (keys_down["q"]) {if (bounce_mod > 0.01) {bounce_mod -= 0.01}}
     if (keys_down["e"]) {bounce_mod += 0.01}
     if (keys_down[" "]) {bounce_mod = 1}
-    if (keys_down["f"]) {rotating = true; rotation_speed = 5}
+    if (keys_down["f"]) {doaflip_pt2_electric_boogaloo()}
     if (keys_down["h"]) {rotating = true; rotation_direction = "cc"}
     if (keys_down["l"]) {rotating = true; rotation_direction = "c"}
     if (keys_down["j"]) {rotation_speed -= 1}
@@ -55,13 +53,19 @@ function handle_keys() {
 }
 
 function doaflip() {
-    if (rotating) {
-        angle += rotation_speed
-    }
-    if (rotation_speed >= 0 && rotation_direction === "cc") {rotation_speed *= -1}
-    if (rotation_speed <= 0 && rotation_direction === "c") {rotation_speed *= -1}
-    if (angle >= 360) {rotating = false; angle = 0; rotation_speed = 0}
+    if (rotation_speed <= 100 && rotation_speed >= -100) {
+        if (rotation_direction === "c") {
+            angle += rotation_speed
+        } else {angle -= rotation_speed}
+    } else {rotation_speed /= 10}
     fox.style.transform = "rotate(" + angle + "deg)"
+}
+
+function doaflip_pt2_electric_boogaloo() {
+    rotating = true; rotation_speed = 5
+    setTimeout(()=> {
+        rotating = false; rotation_speed = 0
+    }, 1000)
 }
 
 function check_collision() {
