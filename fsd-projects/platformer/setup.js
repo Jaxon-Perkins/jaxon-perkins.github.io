@@ -85,7 +85,7 @@ let collectables = [];
 let canvas;
 let ctx;
 
-// setup function variable
+// setup function variable, thanks lol
 let setup;
 
 let halleImage;

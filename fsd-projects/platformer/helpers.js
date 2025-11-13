@@ -4,7 +4,7 @@
 // Core functionality /////////////////////////
 ///////////////////////////////////////////////
 function registerSetup(setup) {
-  setupGame = setup;
+  setupGame = setup; //what
 }
 
 function main() {
