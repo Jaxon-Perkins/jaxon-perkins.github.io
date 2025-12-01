@@ -9,7 +9,7 @@
     <!-- All content goes here -->
     <div id="all-contents">
       <nav>
-        <h1>Jaxon's Amazing Website (with absolutly nothing in it)</h1>
+        <h1>Jaxon's Amazing Website ￣\(=.=)/￣  <--radar</h1>
         <ul class="nav_ul">
           <li class="nav_li"><a href="index.html">Home</a></li>
           <li class="nav_li"><a href="portfolio.html">Portfolio</a></li>
@@ -19,6 +19,7 @@
       <main>
         <div class="sidebar">
           <img
+          id="fox"
             class="sidebar_img"
             alt="Image of a sleeping fox"
             src="sleeping_fennec_fox.jpg"
@@ -40,3 +41,13 @@
     </div>
   </body>
 </html>
+<script>
+  let speed = 0
+  let angle = 0
+  const fox = document.getElementById("fox")
+  fox.addEventListener("click", ()=> {speed++})
+  setInterval(()=> {
+    angle += speed * 10
+    fox.style.transform = "rotate(" + angle + "deg)"
+  }, 1)
+</script>
